@@ -1,8 +1,8 @@
 ---
-name: bug report
-about: bug report
+name: fix
+about: fix
 title: ''
-labels: 'bug'
+labels: 'fix'
 assignees: ''
 
 ---

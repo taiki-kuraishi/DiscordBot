@@ -1,6 +1,6 @@
 ---
-name: feature and enhancement template
-about: feature and enhancement template
+name: task
+about: task
 title: ''
 labels: ''
 assignees: ''
