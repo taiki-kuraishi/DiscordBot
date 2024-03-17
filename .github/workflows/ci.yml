@@ -1,0 +1,44 @@
+name : ci
+
+on:
+  push:
+    branches:
+    - main
+  pull_request:
+
+jobs:
+  pre-commit-hooks:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.12
+
+    - name: Install pre-commit
+      run: pip install --upgrade pip && pip install pre-commit
+
+    - name: Run check-added-large-files check
+      run: pre-commit run check-added-large-files --all-files
+
+    - name: Run check-json check
+      run: pre-commit run check-json --all-files
+
+    - name : Run check-merge-conflict check
+      run: pre-commit run check-merge-conflict --all-files
+
+    - name: Run check-toml check
+      run: pre-commit run check-toml --all-files
+
+    - name: Run check-yaml check
+      run: pre-commit run check-yaml --all-files
+
+    - name: Run end-of-file-fixer check
+      run: pre-commit run end-of-file-fixer --all-files
+
+    - name: Run trailing-whitespace check
+      run: pre-commit run trailing-whitespace --all-files
