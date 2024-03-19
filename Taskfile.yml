@@ -1,0 +1,16 @@
+version: "3"
+
+tasks:
+  setup:
+    dir: ./DiscordBot
+    cmds:
+      - pre-commit install
+      - cp .act.secrets.example .act.secrets
+      - cp discord-bot/.env.example discord-bot/.env
+
+  test:
+    cmds:
+      - docker-compose exec -T discord-bot isort ./app --check-only
+      - docker-compose exec -T discord-bot black ./app --check
+      - docker-compose exec -T discord-bot mypy ./app
+      - docker-compose exec -T discord-bot pylint --recursive=y ./app
