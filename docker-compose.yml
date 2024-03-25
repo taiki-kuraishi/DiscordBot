@@ -6,10 +6,10 @@ services:
       target: development
       dockerfile: ./docker/discord-bot/Dockerfile
     volumes:
-       - ./discord-bot/app:/discord-bot/app
-       - ./docker/discord-bot/requirements.txt:/discord-bot/requirements.txt
-       - ./discord-bot/pyproject.toml:/discord-bot/pyproject.toml
-       - ./.vscode/cspell.json:/discord-bot/cspell.json
+      - ./discord-bot/src:/DiscordBot/discord-bot/src
+      - ./docker/discord-bot/requirements.txt:/DiscordBot/requirements.txt
+      - ./discord-bot/pyproject.toml:/DiscordBot/pyproject.toml
+      - ./.vscode/cspell.json:/DiscordBot/.vscode/cspell.json
     env_file:
       - ./discord-bot/.env
     tty: true

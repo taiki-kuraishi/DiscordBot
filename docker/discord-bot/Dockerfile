@@ -6,15 +6,13 @@ RUN apk update && apk add --no-cache git
 # Base stage
 FROM python:3.12-alpine as base
 
-WORKDIR /discord-bot
+WORKDIR /DiscordBot
 
 COPY docker/discord-bot/requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-WORKDIR /discord-bot
-
-COPY discord-bot/app ./app
+COPY discord-bot/src ./discord-bot/src
 
 # Test stage
 FROM base as test
@@ -36,8 +34,10 @@ FROM test as development
 
 COPY --from=git /usr/ /usr/
 
-COPY .git /discord-bot/.git
+COPY .git /DiscordBot/.git
 
-WORKDIR /discord-bot
+WORKDIR /DiscordBot
 
-COPY .vscode/cspell.json .
+COPY discord-bot/pyproject.toml .
+
+COPY .vscode/cspell.json .vscode/cspell.json
