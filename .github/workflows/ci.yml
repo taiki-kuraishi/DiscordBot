@@ -42,3 +42,38 @@ jobs:
 
     - name: Run trailing-whitespace check
       run: pre-commit run trailing-whitespace --all-files
+
+  ci:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install docker-compose
+      if: ${{ env.ACT }}
+      run: |
+        apt-get update && apt-get install -y docker docker-compose
+
+    - name: setup environment
+      run: |
+        cp .act.secrets.example .act.secrets
+        cp discord-bot/.env.example discord-bot/.env
+
+    - name: Docker build
+      run: docker-compose build
+
+    - name: Docker run
+      run: docker-compose up -d
+
+    - name: Isort
+      run: docker-compose exec -T discord-bot isort ./app --check-only
+
+    - name: Black
+      run: docker-compose exec -T discord-bot black ./app --check
+
+    - name: Mypy
+      run: docker-compose exec -T discord-bot mypy ./app
+
+    - name: Pylint
+      run: docker-compose exec -T discord-bot pylint --recursive=y ./app

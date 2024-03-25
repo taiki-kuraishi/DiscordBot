@@ -10,3 +10,48 @@ repos:
       - id: check-yaml
       - id: end-of-file-fixer
       - id: trailing-whitespace
+
+  - repo: local
+    hooks:
+      - id: docker-build
+        name: docker-build
+        entry: sh -c 'docker-compose build'
+        language: system
+        pass_filenames: false
+        stages: [commit]
+
+  - repo: local
+    hooks:
+      - id: isort
+        name: isort
+        entry: sh -c 'docker-compose exec -T discord-bot isort ./app'
+        language: system
+        types: [python]
+        stages: [commit]
+
+  - repo: local
+    hooks:
+      - id: black
+        name: black
+        entry: sh -c 'docker-compose exec -T discord-bot black ./app'
+        language: system
+        types: [python]
+        stages: [commit]
+
+  - repo: local
+    hooks:
+      - id: mypy
+        name: mypy
+        entry: sh -c 'docker-compose exec -T discord-bot mypy ./app'
+        language: system
+        types: [python]
+        stages: [commit]
+
+  - repo: local
+    hooks:
+      - id: pylint
+        name: pylint
+        entry: sh -c 'docker-compose exec -T discord-bot pylint --recursive=y ./app'
+        language: system
+        types: [python]
+        stages: [commit]
