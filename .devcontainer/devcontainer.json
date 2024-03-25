@@ -2,7 +2,7 @@
     "name": "discord-bot",
     "dockerComposeFile": "../docker-compose.yml",
     "service": "discord-bot",
-    "workspaceFolder": "/discord-bot",
+    "workspaceFolder": "/DiscordBot",
     "customizations": {
         "vscode": {
             "settings": {
