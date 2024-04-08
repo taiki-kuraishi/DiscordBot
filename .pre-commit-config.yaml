@@ -22,18 +22,9 @@ repos:
 
   - repo: local
     hooks:
-      - id: isort
-        name: isort
-        entry: sh -c 'docker-compose exec -T discord-bot isort ./discord-bot'
-        language: system
-        types: [python]
-        stages: [commit]
-
-  - repo: local
-    hooks:
-      - id: black
-        name: black
-        entry: sh -c 'docker-compose exec -T discord-bot black ./discord-bot'
+      - id: ruff
+        name: ruff
+        entry: sh -c 'docker-compose exec -T discord-bot ruff check --fix'
         language: system
         types: [python]
         stages: [commit]
@@ -43,15 +34,6 @@ repos:
       - id: mypy
         name: mypy
         entry: sh -c 'docker-compose exec -T discord-bot mypy ./discord-bot'
-        language: system
-        types: [python]
-        stages: [commit]
-
-  - repo: local
-    hooks:
-      - id: pylint
-        name: pylint
-        entry: sh -c 'docker-compose exec -T discord-bot pylint --recursive=y ./discord-bot'
         language: system
         types: [python]
         stages: [commit]

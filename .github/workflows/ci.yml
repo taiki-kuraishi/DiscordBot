@@ -1,79 +1,36 @@
-name : ci
+name: ci
 
 on:
   push:
     branches:
-    - main
+      - main
   pull_request:
 
 jobs:
-  pre-commit-hooks:
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: 3.12
-
-    - name: Install pre-commit
-      run: pip install --upgrade pip && pip install pre-commit
-
-    - name: Run check-added-large-files check
-      run: pre-commit run check-added-large-files --all-files
-
-    - name: Run check-json check
-      run: pre-commit run check-json --all-files
-
-    - name : Run check-merge-conflict check
-      run: pre-commit run check-merge-conflict --all-files
-
-    - name: Run check-toml check
-      run: pre-commit run check-toml --all-files
-
-    - name: Run check-yaml check
-      run: pre-commit run check-yaml --all-files
-
-    - name: Run end-of-file-fixer check
-      run: pre-commit run end-of-file-fixer --all-files
-
-    - name: Run trailing-whitespace check
-      run: pre-commit run trailing-whitespace --all-files
-
   ci:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Install docker-compose
-      if: ${{ env.ACT }}
-      run: |
-        apt-get update && apt-get install -y docker docker-compose
+      - name: Install docker-compose
+        if: ${{ env.ACT }}
+        run: |
+          apt-get update && apt-get install -y docker docker-compose
 
-    - name: setup environment
-      run: |
-        cp .act.secrets.example .act.secrets
-        cp discord-bot/.env.example discord-bot/.env
+      - uses: arduino/setup-task@v1
 
-    - name: Docker build
-      run: docker-compose build
+      - name: Run task setup
+        run: task setup
 
-    - name: Docker run
-      run: docker-compose up -d
+      - name: docker build
+        run: docker-compose build
 
-    - name: Isort
-      run: docker-compose exec -T discord-bot isort ./discord-bot --check-only
+      - name: docker up
+        run: docker-compose up -d
 
-    - name: Black
-      run: docker-compose exec -T discord-bot black ./discord-bot --check
+      - uses: pre-commit/action@v3.0.0
 
-    - name: Mypy
-      run: docker-compose exec -T discord-bot mypy ./discord-bot
-
-    - name: Pylint
-      run: docker-compose exec -T discord-bot pylint --recursive=y ./discord-bot
+      - name: Run task test
+        run: task test
