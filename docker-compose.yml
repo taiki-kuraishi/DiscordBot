@@ -12,4 +12,6 @@ services:
       - ./.vscode/cspell.json:/DiscordBot/.vscode/cspell.json
     env_file:
       - ./discord-bot/.env
+    environment:
+      - PYTHONPATH=/DiscordBot/discord-bot/src
     tty: true
